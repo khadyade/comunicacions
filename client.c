@@ -33,49 +33,20 @@
  * i les envia per a la verificació. Si la verificació és correcta, mostra un menú que permet a l'usuari
  * interactuar amb diferents opcions fins que decideixi sortir.
  */
-int main(int argc, char **argv)
-{
-    if (argc == 3)
-    {
-        int s;
-        struct sockaddr_in contacte_servidor;
-        char paquet[MIDA_PAQUET];
 
-        // Configuració de connexió amb el servidor
-        s = socket(AF_INET, SOCK_DGRAM, 0);
-        contacte_servidor.sin_family = AF_INET;
-        contacte_servidor.sin_addr.s_addr = inet_addr(argv[1]);
-        contacte_servidor.sin_port = htons(atoi(argv[2]));
-
-        // Demana les credencials de l'usuari
-        char nom[MAX_USUARI], contrasenya[MAX_CONTRASENYA];
-        demana_credencials(nom, contrasenya, MAX_USUARI);
-
-        // Envia les credencials al servidor per a verificació
-        sprintf(paquet, "%s %s", nom, contrasenya);
-        sendto(s, paquet, MIDA_PAQUET, 0, (struct sockaddr *)&contacte_servidor, sizeof(contacte_servidor));
-
-        // Rep la resposta de verificació del servidor
-        recvfrom(s, paquet, MIDA_PAQUET, 0, NULL, NULL);
-        printf("Resposta del servidor: %s\n", paquet);
-
-        // Si la verificació és correcta, mostra el menú d'opcions
-        if (strcmp(paquet, "Usuari verificat\n") == 0)
-        {
-            int opcio;
-            do
-            {
-                // Mostra el menú i envia l'opció seleccionada al servidor
-                opcio = mostra_menu();
-                sprintf(paquet, "%d %s", opcio, nom);
-                sendto(s, paquet, MIDA_PAQUET, 0, (struct sockaddr *)&contacte_servidor, sizeof(contacte_servidor));
-
-                // Rep la resposta del servidor per cada opció seleccionada
-                recvfrom(s, paquet, MIDA_PAQUET, 0, NULL, NULL);
-                printf("Resposta del servidor: %s\n", paquet);
-
-            } while (opcio != 4);  // Repeteix fins que l'usuari decideixi sortir
-        }
+int main(int argc, char **argv) {
+    if (argc != 3) {
+        printf("Ús: %s <IP> <PORT>\n", argv[0]);
+        return -1;
     }
+
+    int s = connecta_servidor(argv[1], atoi(argv[2]));
+    if (s < 0) return -1;
+
+    if (verifica_credencials(s)) {
+        gestiona_menu(s);
+    }
+
+    close(s);
     return 0;
 }

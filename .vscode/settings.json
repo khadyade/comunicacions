@@ -57,6 +57,7 @@
   "C_Cpp_Runner.useLinkTimeOptimization": false,
   "C_Cpp_Runner.msvcSecureNoWarnings": false,
   "files.associations": {
-    "funcions_servidor.h": "c"
+    "funcions_servidor.h": "c",
+    "funcions_client.h": "c"
   }
 }

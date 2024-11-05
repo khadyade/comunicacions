@@ -4,27 +4,28 @@
  | Autors     : Programador 1, Programador 2, Programador 3                      |
  | Assignatura: Xarxes (Segon curs, Enginyeria Informàtica)                      |
  | Universitat: Universitat Rovira i Virgili                                     |
- | Descripció : Breu descripció del fitxer o mòdul                               |
+ | Descripció : Capçalera amb les funcions del client                            |
  =================================================================================
 */
 
 #ifndef FUNCIONS_CLIENT_H
 #define FUNCIONS_CLIENT_H
 
-/**
- * @brief Demana les credencials de l'usuari (nom i contrasenya)
- *
- * @param nom Punter a char per emmagatzemar el nom de l'usuari
- * @param contrasenya Punter a char per emmagatzemar la contrasenya de l'usuari
- * @param max_length Longitud màxima per a nom i contrasenya
- */
-void demana_credencials(char *nom, char *contrasenya, int max_length);
+#include <netinet/in.h>
 
-/**
- * @brief Mostra el menú d'opcions i retorna l'opció seleccionada per l'usuari
- *
- * @return int Retorna l'opció seleccionada per l'usuari
- */
+#define MIDA_PAQUET 100
+#define MAX_USUARI 30
+#define MAX_CONTRASENYA 30
+
+// Funcions per a la gestió de la connexió amb el servidor
+int connecta_servidor(const char *ip, int port);
+void gestiona_menu(int s);
+
+// Funcions per a la gestió del menú i credencials
+void mostra_titol();
+void demana_credencials(char *nom, char *contrasenya);
 int mostra_menu();
+int verifica_credencials(int s);
+void processa_opcio(int s, int opcio);
 
-#endif
+#endif // FUNCIONS_CLIENT_H

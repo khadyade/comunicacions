@@ -12,26 +12,24 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
-#include <sys/socket.h>
 #include "funcions_servidor.h"
 
-int main(int argc, char **argv)
-{
-    if (argc != 2)
-    {
-        printf("El nombre de paràmetres no és el correcte!\n");
+int main(int argc, char **argv) {
+    if (argc != 2) {
+        printf("Ús: %s <PORT>\n", argv[0]);
         return -1;
     }
+
     int port = atoi(argv[1]);
     int s = configura_socket(port);
-    if (s < 0)
-        return -1;
+    if (s < 0) return -1;
+
     struct sockaddr_in contacte_client;
-    while (1)
-    {
-        printf("Esperant connexió d'un client...\n");
+    printf("Esperant connexions...\n");
+    while (1) {
         gestiona_client(s, contacte_client);
     }
-        close(s);
+
+    close(s);
     return 0;
 }
