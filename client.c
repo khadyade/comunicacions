@@ -34,6 +34,7 @@
  * interactuar amb diferents opcions fins que decideixi sortir.
  */
 
+
 int main(int argc, char **argv) {
     if (argc != 3) {
         printf("Ús: %s <IP> <PORT>\n", argv[0]);
